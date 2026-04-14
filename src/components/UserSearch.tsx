@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchGithubUser } from "../api/github";
 import UserCard from "./UserCard";
+import RecentSearches from "./RecentSearches";
 
 const UserSearch = () => {
   const [username, setUsername] = useState('');
@@ -43,6 +44,12 @@ const UserSearch = () => {
 
     {data && 
         <UserCard user = {data}/>
+    }
+
+    {
+        recentUsers.length > 0 && (
+            <RecentSearches users={recentUsers} onSelect={setSubmittedUsername}/>
+        )
     }
     </>
 
