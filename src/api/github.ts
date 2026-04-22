@@ -20,6 +20,9 @@ export const fetchGithubUser = async (username:string) => {
 }
 
 export const searchGithubUser = async (query:string) => {
+  const trimmedQuery = query.trim();
+  if (!trimmedQuery) return [];
+
   const apiUrlFromEnv = import.meta.env.VITE_GITHUB_API_URL;
   const normalizedApiUrl = typeof apiUrlFromEnv === "string" ? apiUrlFromEnv.trim() : "";
   const apiUrl =
@@ -27,7 +30,7 @@ export const searchGithubUser = async (query:string) => {
     ? normalizedApiUrl
     : "https://api.github.com";
       
-  const res = await fetch(`${apiUrl.replace(/\/$/, "")}/users/?q=${query}`, {
+  const res = await fetch(`${apiUrl.replace(/\/$/, "")}/search/users?q=${encodeURIComponent(trimmedQuery)}`, {
       headers: {
         'Accept': 'application/vnd.github.v3+json'
       }
@@ -37,5 +40,5 @@ export const searchGithubUser = async (query:string) => {
 
     const data = await res.json();
     
-    return data;
+    return data.items ?? [];
 }
