@@ -5,6 +5,7 @@ import { fetchGithubUser, searchGithubUser } from "../api/github";
 import UserCard from "./UserCard";
 import RecentSearches from "./RecentSearches";
 import { useDebounce } from "use-debounce";
+import SuggestDropdown from "./SuggestionDropdown";
 import type { GithubUser } from "../types";
 
 
@@ -65,23 +66,21 @@ const UserSearch = () => {
 
       {
         showSuggestions && suggestions?.length > 0 && (
-          <ul className="suggestions">
-            {suggestions.slice(0,5).map((user: GithubUser) => (
-              <li key = {user.login} onClick={() => {
-                setUsername(user.login);
-                setShowSuggestions(false);
+          <SuggestDropdown suggestions = {suggestions} show = {showSuggestions} onSelect={(selected) => {
+            setUsername(selected);
+            setShowSuggestions(false);
 
-                if(submittedUsername !== user.login) {
-                  setSubmittedUsername(user.login);
-                } else {
-                  refetch();
-                }
-              }}>
-                <img src={user.avatar_url} alt={user.name} className="avatar-xs"/>
-                {user.login}
-              </li>
-            ))}
-          </ul>
+            if (submittedUsername !== selected) {
+              setSubmittedUsername(selected);
+            } else {
+              refetch();
+            }
+
+            setRecentUsers((prev) => {
+              const updated = [selected, ...prev.filter((u) => u !== selected)];
+              return updated.slice(0,5);
+          })
+          }}/>
         )
       }
       </div>
