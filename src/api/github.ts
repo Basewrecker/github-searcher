@@ -79,4 +79,26 @@ export const followUser = async (username: string) => {
     const errorData = await res.json();
     throw new Error(errorData.message || 'Failed to follow user');
   }
+
+  return true
+}
+
+export const unfollowUser = async (username: string) => {
+  const res = await fetch(
+    `${import.meta.env.VITE_GITHUB_API_URL}/user/following/${username}`, {
+      method: 'DELETEa',
+      headers: {
+        Authorization: `Bearer ${import.meta.env.VITE_GITHUB_API_TOKEN}`,
+        Accept: 'application/vnd.github+json',
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.message || 'Failed to unfollow user');
+  }
+
+  return true
 }
