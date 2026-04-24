@@ -54,7 +54,7 @@ const UserCard = ({user}: {user: GithubUser}) => {
                 >
                     {isFollowing ? (
                         <>
-                            <FaUserMinus className="follow-icon" /> Following
+                            <FaUserMinus className="following" /> Following
                         </>
                     ) : (
                         <>
